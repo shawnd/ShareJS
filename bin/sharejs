@@ -41,4 +41,5 @@ process.title = 'sharejs'
 process.on('uncaughtException', function (err) {
   util.puts('An error has occurred...');
   util.puts('Version ' + sharejs.version + ': ' + err.stack);
+  process.exit(1);
 });

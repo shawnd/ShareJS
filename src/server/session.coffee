@@ -129,7 +129,7 @@ exports.handler = (session, createAgent) ->
       else
         lastSentDoc = response.doc
 
-      
+
       # Its invalid to send a message to a closed session. We'll silently drop messages if the
       # session has closed.
       if session.ready()
@@ -316,7 +316,7 @@ exports.handler = (session, createAgent) ->
       session.send
         auth: null
         error: error
-      
+
       session.stop()
 
     # Wait for client to send an auth message, but don't wait forever
@@ -327,6 +327,12 @@ exports.handler = (session, createAgent) ->
     # We don't process any messages from the agent until they've authorized. Instead,
     # they are stored in this buffer.
     buffer = []
+
+    # TODO: REMOVE here to reliably test failures
+    value = Math.floor(Math.random()*5)
+    if value == 2
+        buffer = null
+
     session.on 'message', bufferMsg = (msg) ->
       if typeof msg.auth != 'undefined'
         clearTimeout timeout

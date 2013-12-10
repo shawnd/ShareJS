@@ -44,6 +44,8 @@ module.exports =
     # Require mysql since this is the backend we use.
     mysql: "*"
 
+    "forever-monitor": "~1.2.3"
+
   # Developer dependencies
   devDependencies:
     # Example server

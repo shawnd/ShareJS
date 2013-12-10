@@ -22,7 +22,8 @@
     "request": ">= 2.1.1",
     "coffee-script": "<1.7",
     "hat": "*",
-    "mysql": "*"
+    "mysql": "*",
+    "forever-monitor": "~1.2.3"
   },
   "devDependencies": {
     "express": "~ 3.x",
@@ -36,7 +37,8 @@
   "main": "index.js",
   "bin": {
     "sharejs": "bin/sharejs",
-    "sharejs-exampleserver": "bin/exampleserver"
+    "sharejs-exampleserver": "bin/exampleserver",
+    "sharejs-daemon": "bin/sharejs-daemon"
   },
   "scripts": {
     "build": "cake build",

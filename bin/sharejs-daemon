@@ -1,0 +1,28 @@
+#!/usr/bin/env node
+
+var forever = require('forever-monitor');
+var fs = require('fs');
+var argv = require('optimist').
+    usage("Usage: $0 -f options.js").
+	demand('f').
+    alias('f','options').
+	argv;
+
+options = require(argv.options);
+
+var child = new (forever.Monitor)('/usr/bin/sharejs', {
+  options: ['-f', options.sharejs_options_file],
+});
+
+var notify_runtime = function(){
+  fs.writeFile(options.daemon_notify_restart_file, Date().toString(), function (err){
+    if(err){
+      process.exit();
+    }
+  });
+};
+
+child.on('restart', notify_runtime);
+
+notify_runtime();
+child.start();
