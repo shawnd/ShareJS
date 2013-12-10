@@ -11,6 +11,7 @@ var argv = require('optimist').
 options = require(argv.options);
 
 var child = new (forever.Monitor)('/usr/bin/sharejs', {
+  pidFile: '/var/run/sharejs.pid',
   options: ['-f', options.sharejs_options_file],
 });
 
