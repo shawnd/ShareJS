@@ -328,8 +328,8 @@ exports.handler = (session, createAgent) ->
     # they are stored in this buffer.
     buffer = []
 
-    # TODO: REMOVE here to reliably test failures
-    value = Math.floor(Math.random()*5)
+    # TODO: REMOVE!!! This is here to reliably test failures
+    value = Math.floor(Math.random()*10)
     if value == 2
         buffer = null
 
