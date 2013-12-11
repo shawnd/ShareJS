@@ -12,6 +12,7 @@ options = require(argv.options);
 
 var child = new (forever.Monitor)('/usr/bin/sharejs', {
   pidFile: '/var/run/sharejs.pid',
+  killTree: 'true',
   options: ['-f', options.sharejs_options_file],
 });
 
@@ -23,7 +24,14 @@ var notify_runtime = function(){
   });
 };
 
+child.on('stop', function(){
+    fs.unlinkSync(options.daemon_notify_restart_file);
+});
 child.on('restart', notify_runtime);
+
+process.on('exit', function(){
+    fs.unlinkSync(options.daemon_notify_restart_file);
+});
 
 notify_runtime();
 child.start();
