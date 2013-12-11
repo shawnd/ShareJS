@@ -17,7 +17,7 @@ var child = new (forever.Monitor)('/usr/bin/sharejs', {
 });
 
 var notify_runtime = function(){
-  fs.writeFile(options.daemon_notify_restart_file, Date().toString(), function (err){
+  fs.writeFile(options.daemon_pulse_file, Date().toString(), function (err){
     if(err){
       process.exit();
     }
@@ -25,12 +25,12 @@ var notify_runtime = function(){
 };
 
 child.on('stop', function(){
-    fs.unlinkSync(options.daemon_notify_restart_file);
+    fs.unlinkSync(options.daemon_pulse_file);
 });
 child.on('restart', notify_runtime);
 
 process.on('exit', function(){
-    fs.unlinkSync(options.daemon_notify_restart_file);
+    fs.unlinkSync(options.daemon_pulse_file);
 });
 
 notify_runtime();
