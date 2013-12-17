@@ -421,6 +421,7 @@ exports.handler = function(session, createAgent) {
     }, AUTH_TIMEOUT);
 
     buffer = [];
+
     var isAuthed = false;
     // Walk through message buffer and handle all messages
     // if we are already authorized.
