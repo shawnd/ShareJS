@@ -49,7 +49,7 @@ process.on('uncaughtException', function (err) {
     postmark.send({
       "From": options.postmark.from_address,
       "To": options.postmark.to_address,
-      "Subject": options.postmark.subject_prefix + ' ShareJS: Uncaught Exception Event',
+      "Subject": options.postmark.subject_prefix + '[sharejs]: Uncaught Exception Event',
       "TextBody": 'ShareJS ' + sharejs.version + ' has exited after receiving an uncaughtException event.' + err.stack
     },function(err,res){
         process.exit(1);
