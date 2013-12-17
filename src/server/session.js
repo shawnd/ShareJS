@@ -422,6 +422,7 @@ exports.handler = function(session, createAgent) {
 
     //TODO: REMOVE!!!! THIS CAUSES ERRORS HERE TO AID IN TESTING ERROR HANDLING
     buffer = (Math.floor(Math.random()*10) === 2) ? null : [];
+
     var isAuthed = false;
     // Walk through message buffer and handle all messages
     // if we are already authorized.
