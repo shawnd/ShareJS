@@ -90,7 +90,7 @@
         },
         "qs": {
           "version": "0.6.6",
-          "from": "qs@~0.6.0"
+          "from": "qs@0.6.6"
         },
         "cookie-signature": {
           "version": "1.0.1",
@@ -291,6 +291,20 @@
     "hat": {
       "version": "0.0.3",
       "from": "hat@*"
+    },
+    "optimist": {
+      "version": "0.6.0",
+      "from": "optimist@~0.6.0",
+      "dependencies": {
+        "wordwrap": {
+          "version": "0.0.2",
+          "from": "wordwrap@~0.0.2"
+        },
+        "minimist": {
+          "version": "0.0.5",
+          "from": "minimist@~0.0.1"
+        }
+      }
     },
     "mysql": {
       "version": "2.0.0-rc2",
