@@ -53,7 +53,7 @@ process.on('uncaughtException', function (err) {
       "TextBody": 'ShareJS ' + sharejs.version + ' has exited after receiving an uncaughtException event.' + err.stack
     },function(err,res){
         process.exit(1);
-    };
+    });
   }else{
     process.exit(1);
   }
