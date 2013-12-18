@@ -41,8 +41,12 @@ module.exports =
     # Useragent hashing
     hat: "*"
 
+    optimist: "~0.6.0"
+
     # Require mysql since this is the backend we use.
     mysql: "*"
+
+    postmark: "~0.2.0"
 
   # Developer dependencies
   devDependencies:

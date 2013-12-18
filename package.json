@@ -22,11 +22,12 @@
     "request": ">= 2.1.1",
     "coffee-script": "<1.7",
     "hat": "*",
-    "mysql": "*"
+    "optimist": "~0.6.0",
+    "mysql": "*",
+    "postmark": "~0.2.0"
   },
   "devDependencies": {
     "express": "~ 3.x",
-    "optimist": ">= 0.2.4",
     "nodeunit": "*",
     "shelljs": "*",
     "uglify-js": "~1",
