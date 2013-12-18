@@ -420,8 +420,7 @@ exports.handler = function(session, createAgent) {
         return failAuthentication('Timeout waiting for client auth message');
     }, AUTH_TIMEOUT);
 
-    //TODO: REMOVE!!!! THIS CAUSES ERRORS HERE TO AID IN TESTING ERROR HANDLING
-    buffer = (Math.floor(Math.random()*10) === 2) ? null : [];
+    buffer = [];
 
     var isAuthed = false;
     // Walk through message buffer and handle all messages
