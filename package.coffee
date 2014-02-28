@@ -48,6 +48,8 @@ module.exports =
 
     postmark: "~0.2.0"
 
+    airbrake: "~0.3.0"
+
   # Developer dependencies
   devDependencies:
     # Example server
