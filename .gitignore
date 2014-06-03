@@ -6,3 +6,12 @@ test/**/*.js
 .idea/*
 node_modules/ws/build/
 node_modules/ws/builderror.log
+node_modules/.bin/express
+node_modules/.bin/nodeunit
+node_modules/.bin/shjs
+node_modules/.bin/uglifyjs
+node_modules/express/
+node_modules/nodeunit/
+node_modules/shelljs/
+node_modules/uglify-js/
+node_modules/websocket/
