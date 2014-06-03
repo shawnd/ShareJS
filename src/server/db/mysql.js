@@ -110,7 +110,7 @@ module.exports = MysqlDb = function(options) {
         return client.query(sql, values, function(error, result) {
             if (!(error != null)) {
                 return typeof callback === "function" ? callback() : void 0;
-            } else if (error.toString().match("duplicate key value violates unique constraint")) {
+            } else if (error.toString().match("duplicate key value violates unique constraint") || error.toString().match("ER_DUP_ENTRY: Duplicate entry")) {
                 return typeof callback === "function" ? callback("Document already exists") : void 0;
             } else {
                 return typeof callback === "function" ? callback(error != null ? error.message : void 0) : void 0;
