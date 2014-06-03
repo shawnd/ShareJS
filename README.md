@@ -42,13 +42,13 @@ If you want redis support, you'll need to install redis:
 ### From source
 
 Install redis (optional)
-    
+
 * Mac:
 
         # brew install redis
 
 * Linux:
-   
+
         # sudo apt-get install redis
 
 Then:
@@ -111,7 +111,7 @@ There are two ways to run a sharejs server:
 3. If you are just mucking around, run:
 
         # sharejs-exampleserver
-  
+
     This will run a simple server on port 8000, and host all the example code there. Run it and check out http://localhost:8000/ . The example server stores everything in ram, so don't get too attached to your data.
 
     > If you're running sharejs from source, you can launch the example server by running `bin/exampleserver`.
@@ -197,5 +197,19 @@ client.open('hello', 'text', 'http://localhost:8000/sjs', function(error, doc) {
 > **NOTE:** If you're using version 0.4 or earler, the argument order is the other way around (`function(doc, error)`).
 
 See [`the wiki`](https://github.com/josephg/ShareJS/wiki) for API documentation, and `examples/node*` for some more example apps.
+
+Updating Node Dependencies
+-------------------------
+Currently we check in the required production node modules without the built binaries and dev dependencies.  This allows us to not have any download
+dependency on npm being up and available.
+
+To do this, based on this article: http://www.letscodejavascript.com/v3/blog/2014/03/the_npm_debacle
+* ```rm -rf npm-shrinkwrap.json```                 # If wanting to update dependencies, remove the current shrinkwrap
+* ```rm -rf node_modules```                        # If needed remove the current node_modules directory (recommend)
+* ```npm install --production --ignore-scripts```  # This downloads only production modules and does not build binaries
+* ```git add . && git commit -a```                 # Add and check in modules
+* ```npm rebuild```                                # Build the binaries
+* ```git status```                                 # Show the binary directories, these can be added to gitignore
+* ```sudo npm shrinkwrap```                        # If shrinkwrapping, recreate the shrinkwrap
 
 
