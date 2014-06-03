@@ -87,11 +87,11 @@ module.exports = MysqlDb = function(options) {
         client.query(sql, function(error, result) {
             return error != null ? error.message : void 0;
         });
-        sql = "CREATE TABLE " + snapshot_table + " (\n  doc varchar(900) NOT NULL,\n  v int NOT NULL,\n  type varchar(256) NOT NULL,\n  snapshot mediumtext NOT NULL,\n  meta text NOT NULL,\n  created_at timestamp NOT NULL,\n  CONSTRAINT snapshots_pkey PRIMARY KEY (doc, v)\n);";
+        sql = "CREATE TABLE " + snapshot_table + " (\n  doc varchar(900) NOT NULL,\n  v int NOT NULL,\n  type varchar(256) NOT NULL,\n  snapshot mediumtext NOT NULL,\n  meta text NOT NULL,\n  created_at timestamp NOT NULL,\n  CONSTRAINT snapshots_pkey PRIMARY KEY (doc, v)\n) ENGINE=MyISAM;";
         client.query(sql, function(error, result) {
             return error != null ? error.message : void 0;
         });
-        sql = "CREATE TABLE " + operations_table + " (\n  doc varchar(900) NOT NULL,\n  v int NOT NULL,\n  op mediumtext NOT NULL,\n  meta text NOT NULL,\n  CONSTRAINT operations_pkey PRIMARY KEY (doc, v)\n);";
+        sql = "CREATE TABLE " + operations_table + " (\n  doc varchar(900) NOT NULL,\n  v int NOT NULL,\n  op mediumtext NOT NULL,\n  meta text NOT NULL,\n  CONSTRAINT operations_pkey PRIMARY KEY (doc, v)\n) ENGINE=MyISAM;";
         return client.query(sql, function(error, result) {
             return typeof callback === "function" ? callback(error != null ? error.message : void 0) : void 0;
         });
