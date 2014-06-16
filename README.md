@@ -16,6 +16,20 @@ ShareJS currently supports operational transform on plain-text and arbitrary JSO
 > Note: CI sometimes breaks for random reasons even though the tests work locally. Don't stress!
 [![Build Status](https://secure.travis-ci.org/josephg/ShareJS.png)](http://travis-ci.org/josephg/ShareJS)
 
+History
+=======
+
+1.2.1
+
+ -- Add Airbrake Support
+ -- Check in node_modules
+ -- Make MySQL 5.5 Compliant
+ -- Changes to make tests run in Codeship
+
+- ELB
+
+
+
 
 Browser support
 ---------------
