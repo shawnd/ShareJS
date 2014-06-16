@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 
+
 require('coffee-script');
 var util = require('util');
 var fs = require('fs');
@@ -12,12 +13,25 @@ var argv = require('optimist').
     alias('f','options').
 	argv;
 
+
 var server;
+var postmark;
+var airbrake;
 
 options = require(argv.options);
 
+// Set the environment for Node, Airbrake/others use this.
+if (options.environment) {
+    process.env.NODE_ENV = options.environment;
+}
+
 if(options.postmark && options.postmark.key){
-    var postmark = require("postmark")(options.postmark.key);
+    postmark = require("postmark")(options.postmark.key);
+}
+
+if (options.airbrake && options.airbrake.projectKey) {
+    airbrake =  require("airbrake").createClient(options.airbrake.projectKey);
+    airbrake.handleExceptions();
 }
 
 if(options.pem) {
