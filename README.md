@@ -20,14 +20,15 @@ History
 =======
 
 1.2.1
+ * Add Airbrake Support
+ * Check in node_modules
+ * Make MySQL 5.5 Compliant
+ * Changes to make tests run in Codeship
 
- -- Add Airbrake Support
- -- Check in node_modules
- -- Make MySQL 5.5 Compliant
- -- Changes to make tests run in Codeship
+ -- Eric June 16th, 2014
 
-- ELB
-
+1.2.0
+ * Postmark Support
 
 
 
