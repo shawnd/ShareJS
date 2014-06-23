@@ -1,5 +1,6 @@
-ShareJS 1.3.0
+ShareJS
 =======
+
 
 This repo was cloned off the original ShareJS version 0.5.0.
 
@@ -16,6 +17,23 @@ ShareJS currently supports operational transform on plain-text and arbitrary JSO
 > Note: CI sometimes breaks for random reasons even though the tests work locally. Don't stress!
 [![Build Status](https://secure.travis-ci.org/josephg/ShareJS.png)](http://travis-ci.org/josephg/ShareJS)
 
+Versions
+------
+
+1.3.0
+
+    * Changes to allow MySQL 5.5 table creation
+    * Check in node_modules and update readme to include section on how to check in only dependencies without binaries.
+    * Additional tweaks to allow tests to be run in codeship
+
+-- Eric Byers June 16, 2014
+
+1.2.0
+
+    * Add postmark support, will now email via postmark on errors.
+    * Additional changes for allow a daemon to auto restart ShareJS on error.
+
+-- Matt Surabian
 
 Browser support
 ---------------
@@ -211,5 +229,3 @@ To do this, based on this article: http://www.letscodejavascript.com/v3/blog/201
 * ```npm rebuild```                                # Build the binaries
 * ```git status```                                 # Show the binary directories, these can be added to gitignore
 * ```sudo npm shrinkwrap```                        # If shrinkwrapping, recreate the shrinkwrap
-
-
