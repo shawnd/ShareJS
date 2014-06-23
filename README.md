@@ -1,4 +1,4 @@
-ShareJS
+ShareJS 1.3.0
 =======
 
 This repo was cloned off the original ShareJS version 0.5.0.

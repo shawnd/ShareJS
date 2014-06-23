@@ -2,7 +2,7 @@
 
 # This way all the modules can add stuff to exports, and for the web client they'll all get exported.
 window.sharejs = exports =
-  'version': '1.2.0'
+  'version': '1.3.0'
 
 # This is compiled out when compiled with uglifyjs, but its important for the share.uncompressed.js.
 #
