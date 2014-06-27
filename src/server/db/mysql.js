@@ -87,11 +87,11 @@ module.exports = MysqlDb = function(options) {
         client.query(sql, function(error, result) {
             return error != null ? error.message : void 0;
         });
-        sql = "CREATE TABLE " + snapshot_table + " (\n  doc varchar(900) NOT NULL,\n  v int NOT NULL,\n  type varchar(256) NOT NULL,\n  snapshot mediumtext NOT NULL,\n  meta text NOT NULL,\n  created_at timestamp NOT NULL,\n  CONSTRAINT snapshots_pkey PRIMARY KEY (doc, v)\n);";
+        sql = "CREATE TABLE " + snapshot_table + " (\n  doc varchar(900) NOT NULL,\n  v int NOT NULL,\n  type varchar(256) NOT NULL,\n  snapshot mediumtext NOT NULL,\n  meta text NOT NULL,\n  created_at timestamp NOT NULL,\n  CONSTRAINT snapshots_pkey PRIMARY KEY (doc, v)\n) ENGINE=MyISAM CHARSET=latin1;";
         client.query(sql, function(error, result) {
             return error != null ? error.message : void 0;
         });
-        sql = "CREATE TABLE " + operations_table + " (\n  doc varchar(900) NOT NULL,\n  v int NOT NULL,\n  op mediumtext NOT NULL,\n  meta text NOT NULL,\n  CONSTRAINT operations_pkey PRIMARY KEY (doc, v)\n);";
+        sql = "CREATE TABLE " + operations_table + " (\n  doc varchar(900) NOT NULL,\n  v int NOT NULL,\n  op mediumtext NOT NULL,\n  meta text NOT NULL,\n  CONSTRAINT operations_pkey PRIMARY KEY (doc, v)\n) ENGINE=MyISAM CHARSET=latin1;";
         return client.query(sql, function(error, result) {
             return typeof callback === "function" ? callback(error != null ? error.message : void 0) : void 0;
         });
@@ -110,7 +110,7 @@ module.exports = MysqlDb = function(options) {
         return client.query(sql, values, function(error, result) {
             if (!(error != null)) {
                 return typeof callback === "function" ? callback() : void 0;
-            } else if (error.toString().match("duplicate key value violates unique constraint")) {
+            } else if (error.toString().match("duplicate key value violates unique constraint") || error.toString().match("ER_DUP_ENTRY: Duplicate entry*")) {
                 return typeof callback === "function" ? callback("Document already exists") : void 0;
             } else {
                 return typeof callback === "function" ? callback(error != null ? error.message : void 0) : void 0;

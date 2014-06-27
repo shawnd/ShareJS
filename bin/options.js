@@ -16,7 +16,7 @@ module.exports = {
     // all documents are deleted when the server restarts.
 
     // By default, sharejs tries to use the redis DB backend.
-		type: 'redis',
+		type: 'mysql',
 
 		// The prefix for database entries
 		prefix: 'ShareJS:'
