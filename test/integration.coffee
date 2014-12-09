@@ -46,15 +46,18 @@ genTests = (client, dbType) -> testCase
     @name = 'testingdoc'
     @server = server {db: {type: dbType}}
     @server.listen =>
-      @port = @server.address().port
+      @port = 8000
 
+      console.log "Opening connections on port #{@port}"
       # We use 127.0.0.1 here so if the process runs out of file handles,
       # we'll get the correct error message instead of a generic DNS connection
       # error.
       @c1 = new client.Connection "http://127.0.0.1:#{@port}/channel"
       @c1.on 'connect', =>
+        console.log 'Connection 1 opened'
         @c2 = new client.Connection "http://127.0.0.1:#{@port}/channel"
         @c2.on 'connect', =>
+          console.log 'Connection 2 opened'
           callback()
 
   tearDown: (callback) ->
@@ -116,7 +119,7 @@ genTests = (client, dbType) -> testCase
 
   'randomized op spam test': (test) ->
     doubleOpen @c1, @c2, @name, 'text', (doc1, doc2) =>
-      opsRemaining = 500
+      opsRemaining = 50000
 
       inflight = 0
       checkSync = null
