@@ -7,6 +7,8 @@
 
 queue = require './syncqueue'
 types = require '../types'
+Validator = require './Validator'
+
 
 isArray = (o) -> Object.prototype.toString.call(o) == '[object Array]'
 
@@ -93,6 +95,11 @@ module.exports = Model = (db, options) ->
   # client to transform if they're too old.
   options.maximumAge ?= 40
 
+
+  # load a schema validator to validate the doc after each op is applied
+  if options.validation.enabled
+    validator = new Validator options;
+
   # **** Cache API methods
 
   # Its important that all ops are applied in order. This helper method creates the op submission queue
@@ -140,6 +147,10 @@ module.exports = Model = (db, options) ->
       catch error
         console.error error.stack
         return callback error.message
+
+      # Validate the snapshot against the appropriate schema
+      if validator
+        validator.validate(docName, opData.op, snapshot);
 
       # The op data should be at the current version, and the new document data should be at
       # the next version.
