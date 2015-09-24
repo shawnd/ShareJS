@@ -107,9 +107,9 @@ auth = (req, res, createClient, cb) ->
 getDocument = (req, res, client) ->
   if req.params.name == "status"
     data =
-      openDocCount:      stats.getOpenDocCount(),
-      submittedOpsCount: stats.getSubmittedOpCount(),
-      broadcastEventCount: stats.getBroadcastEventCount()
+      openDocCount        : stats.getOpenDocCount(),
+      submittedOpsCount   : stats.getSubmittedOpCount(req.query.interval),
+      broadcastEventCount : stats.getBroadcastEventCount(req.query.interval)
     send200 res, JSON.stringify(data)
   else
     client.getSnapshot req.params.name, (error, doc) ->

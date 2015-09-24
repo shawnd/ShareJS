@@ -27,6 +27,18 @@ module.exports = {
     },
 
     getSubmittedOpCount : function(interval) {
+        if(interval && submittedOps.length > 0) {
+            var time = new Date().getTime();
+            var intervalStart = time - interval;
+
+            for (var i = 0; i < submittedOps.length; i++) {
+                if (submittedOps[i] < intervalStart) {
+                    submittedOps.length = i;
+                    break;
+                }
+            }
+        }
+
         return submittedOps.length;
     },
 
@@ -35,6 +47,18 @@ module.exports = {
     },
 
     getBroadcastEventCount : function(interval) {
+        if(interval && broadcastEvents.length > 0) {
+            var time = new Date().getTime();
+            var intervalStart = time - interval;
+
+            for (var i = 0; i < broadcastEvents.length; i++) {
+                if (broadcastEvents[i] < intervalStart) {
+                    broadcastEvents.length = i;
+                    break;
+                }
+            }
+        }
+
         return broadcastEvents.length;
     }
 };
