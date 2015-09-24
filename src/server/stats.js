@@ -11,9 +11,11 @@ module.exports = {
 
     getOpenDocCount : function() {
         var count = 0;
-        for(var userAgent in allUserAgents) {
-            var agentListeners = userAgent.getListeners();
-            count += agentListeners.length;
+        for(var userAgentKey in allUserAgents) {
+            if (allUserAgents.hasOwnProperty(userAgentKey)) {
+                var userAgent = allUserAgents[userAgentKey];
+                count += userAgent.getListenersCount();
+            }
         }
         return count;
     }
