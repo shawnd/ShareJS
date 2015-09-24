@@ -1,4 +1,6 @@
 var allUserAgents = {};
+var submittedOps = [];
+var broadcastEvents = [];
 
 module.exports = {
     addUserAgent : function(id, agent) {
@@ -18,5 +20,21 @@ module.exports = {
             }
         }
         return count;
+    },
+
+    addSubmittedOp : function() {
+        submittedOps.unshift(new Date().getTime());
+    },
+
+    getSubmittedOpCount : function(interval) {
+        return submittedOps.length;
+    },
+
+    addBroadcastEvent : function() {
+        broadcastEvents.unshift(new Date().getTime());
+    },
+
+    getBroadcastEventCount : function(interval) {
+        return broadcastEvents.length;
     }
 };
