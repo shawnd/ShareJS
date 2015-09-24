@@ -103,7 +103,7 @@ module.exports = (model, options) ->
       opData.meta.source = @sessionId
       dupIfSource = opData.dupIfSource or []
 
-      stats.addSubmittedOp
+      stats.addSubmittedOp()
 
       # If ops and meta get coalesced, they should be separated here.
       if opData.op
@@ -140,7 +140,7 @@ module.exports = (model, options) ->
             if error
               delete @listeners[docName]
 
-            stats.addBroadcastEvent
+            stats.addBroadcastEvent()
             callback? error, v
 
     removeListener: (docName) ->
