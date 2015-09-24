@@ -193,6 +193,9 @@ exports.handler = function(session, createAgent) {
                 v: opData.v,
                 meta: opData.meta
             };
+
+            stats.addBroadcastEvent();
+
             return send(opMsg);
         };
 
@@ -390,6 +393,8 @@ exports.handler = function(session, createAgent) {
             meta: query.meta,
             dupIfSource: query.dupIfSource
         };
+
+        stats.addSubmittedOp();
 
         // If it's a metaOp don't send a response
         return agent.submitOp(query.doc, opData, !(opData.op != null) && (((_ref = opData.meta) != null ? _ref.path : void 0) != null) ? callback : function(error, appliedVersion) {

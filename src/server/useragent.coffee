@@ -5,7 +5,6 @@
 
 hat = require 'hat'
 types = require '../types'
-stats = require './stats'
 
 # This module exports a function which you can call with the model and options. Calling the function
 # returns _another_ function which you can call when clients connect.
@@ -103,8 +102,6 @@ module.exports = (model, options) ->
       opData.meta.source = @sessionId
       dupIfSource = opData.dupIfSource or []
 
-      stats.addSubmittedOp()
-
       # If ops and meta get coalesced, they should be separated here.
       if opData.op
         @doAuth {docName, op:opData.op, v:opData.v, meta:opData.meta, dupIfSource}, 'submit op', callback, =>
@@ -140,7 +137,6 @@ module.exports = (model, options) ->
             if error
               delete @listeners[docName]
 
-            stats.addBroadcastEvent()
             callback? error, v
 
     removeListener: (docName) ->
