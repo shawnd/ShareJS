@@ -27,6 +27,8 @@ hat = require('hat');
 
 syncQueue = require('./syncqueue');
 
+stats = require('./stats');
+
 AUTH_TIMEOUT = 10000;
 
 // session should implement the following interface:
@@ -458,6 +460,7 @@ exports.handler = function(session, createAgent) {
                     return failAuthentication(error);
                 } else {
                     agent = agent_;
+                    stats.addUserAgent(agent.sessionId, agent);
                     session.send({
                         auth: agent.sessionId
                     });
@@ -484,6 +487,9 @@ exports.handler = function(session, createAgent) {
                 agent.removeListener(docName);
             }
         }
+
+        stats.removeUserAgent(agent.sessionId);
+
         return docState = null;
     });
 };

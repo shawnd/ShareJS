@@ -74,6 +74,9 @@ module.exports = (model, options) ->
     getSnapshot: (docName, callback) ->
       @doAuth {docName}, 'get snapshot', callback, ->
         model.getSnapshot docName, callback
+
+    getListeners: ->
+      return @listeners;
     
     create: (docName, type, meta, callback) ->
       # We don't check that types[type.name] == type. That might be important at some point.
