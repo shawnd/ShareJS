@@ -75,11 +75,13 @@ module.exports = (model, options) ->
       @doAuth {docName}, 'get snapshot', callback, ->
         model.getSnapshot docName, callback
 
+    # Return the number of listeners this user agent has (number of docs open)
     getListenersCount: ->
       count = 0
       for listenerKey of @listeners
         if @listeners.hasOwnProperty(listenerKey)
           count++
+
       count
     
     create: (docName, type, meta, callback) ->

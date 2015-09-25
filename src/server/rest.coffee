@@ -105,8 +105,10 @@ auth = (req, res, createClient, cb) ->
 # GET returns the document snapshot. The version and type are sent as headers.
 # I'm not sure what to do with document metadata - it is inaccessable for now.
 getDocument = (req, res, client) ->
+  # If hitting the /status endpoint, send a JSON of stats back
   if req.params.name == "status"
     data =
+      openConnectionCount : stats.getUserAgentCount(),
       openDocCount        : stats.getOpenDocCount(),
       submittedOpsCount   : stats.getSubmittedOpCount(req.query.interval),
       broadcastEventCount : stats.getBroadcastEventCount(req.query.interval)

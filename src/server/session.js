@@ -194,6 +194,7 @@ exports.handler = function(session, createAgent) {
                 meta: opData.meta
             };
 
+            // Sending a message to the listener. Lets track it so the status endpoint can report it.
             stats.addBroadcastEvent();
 
             return send(opMsg);
@@ -394,6 +395,7 @@ exports.handler = function(session, createAgent) {
             dupIfSource: query.dupIfSource
         };
 
+        // Submitting an op. Lets track it so the status endpoint can report it.
         stats.addSubmittedOp();
 
         // If it's a metaOp don't send a response
@@ -465,7 +467,10 @@ exports.handler = function(session, createAgent) {
                     return failAuthentication(error);
                 } else {
                     agent = agent_;
+
+                    // Keep track of this user agent until it disconnects
                     stats.addUserAgent(agent.sessionId, agent);
+
                     session.send({
                         auth: agent.sessionId
                     });
@@ -493,6 +498,7 @@ exports.handler = function(session, createAgent) {
             }
         }
 
+        // User agent no longer connected so stop keeping track of it
         stats.removeUserAgent(agent.sessionId);
 
         return docState = null;
