@@ -20,6 +20,12 @@ ShareJS currently supports operational transform on plain-text and arbitrary JSO
 Versions
 ------
 
+1.4.0
+
+    * Added status REST endpoint for getting metrics out of sharejs
+
+-- Dan Wash Sept 25, 2015
+
 1.3.0
 
     * Changes to allow MySQL 5.5 table creation
