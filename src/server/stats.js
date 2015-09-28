@@ -1,8 +1,44 @@
+var lastStatsPoll = new Date().getTime();
 var allUserAgents = {};
 var submittedOps = [];
 var broadcastEvents = [];
 
 module.exports = {
+    /**
+     * Poll the stats. For the submitted ops and broadcast events, calculate the count per second by taking
+     * the number since the last poll and divide by the seconds since the last poll.
+     *
+     * @returns {{
+     *      openConnectionCount: number,
+     *      openDocCount: number,
+     *      submittedOpsCount: Number,
+     *      broadcastEventCount: Number
+     * }}
+     */
+    pollStats : function() {
+        var submittedOpCount = this.getSubmittedOpCount();
+        var broadcastEventCount = this.getBroadcastEventCount();
+
+        // Get the data per second by figuring out the number of seconds since the last poll
+        // and dividing the data by it
+        var pollTime = new Date().getTime();
+        var secondsSinceLastPoll = (pollTime - lastStatsPoll) / 1000;
+        if(secondsSinceLastPoll > 0) {
+            submittedOpCount    = submittedOpCount / secondsSinceLastPoll;
+            broadcastEventCount = broadcastEventCount / secondsSinceLastPoll;
+        }
+
+        // Track this as the last poll time
+        lastStatsPoll = pollTime;
+
+        return {
+            openConnectionCount : this.getUserAgentCount(),
+            openDocCount        : this.getOpenDocCount(),
+            submittedOpsCount   : submittedOpCount,
+            broadcastEventCount : broadcastEventCount
+        };
+    },
+
     /**
      * Start tracking the user agent by ID
      *
@@ -69,26 +105,15 @@ module.exports = {
     },
 
     /**
-     * Get the number of submitted ops. If interval is not specified, get all. If interval is specified, return
-     * the number within that amount of time and then truncate older values off.
+     * Get the number of submitted ops since the last time it was polled. Get the number and then truncate the array.
      *
-     * @param interval - milliseconds
      * @returns {Number}
      */
-    getSubmittedOpCount : function(interval) {
-        if(interval && submittedOps.length > 0) {
-            var time = new Date().getTime();
-            var intervalStart = time - interval;
+    getSubmittedOpCount : function() {
+        var count = submittedOps.length;
+        submittedOps = [];
 
-            for (var i = 0; i < submittedOps.length; i++) {
-                if (submittedOps[i] < intervalStart) {
-                    submittedOps.length = i;
-                    break;
-                }
-            }
-        }
-
-        return submittedOps.length;
+        return count;
     },
 
     /**
@@ -107,25 +132,14 @@ module.exports = {
     },
 
     /**
-     * Get the number of broadcast events. If interval is not specified, get all. If interval is specified, return
-     * the number within that amount of time and then truncate older values off.
+     * Get the number of broadcast events since the last time it was polled. Get the number and then truncate the array.
      *
-     * @param interval - milliseconds
      * @returns {Number}
      */
-    getBroadcastEventCount : function(interval) {
-        if(interval && broadcastEvents.length > 0) {
-            var time = new Date().getTime();
-            var intervalStart = time - interval;
+    getBroadcastEventCount : function() {
+        var count = broadcastEvents.length;
+        broadcastEvents = [];
 
-            for (var i = 0; i < broadcastEvents.length; i++) {
-                if (broadcastEvents[i] < intervalStart) {
-                    broadcastEvents.length = i;
-                    break;
-                }
-            }
-        }
-
-        return broadcastEvents.length;
+        return count;
     }
 };

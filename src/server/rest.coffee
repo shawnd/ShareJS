@@ -107,11 +107,7 @@ auth = (req, res, createClient, cb) ->
 getDocument = (req, res, client) ->
   # If hitting the /status endpoint, send a JSON of stats back
   if req.params.name == "status"
-    data =
-      openConnectionCount : stats.getUserAgentCount(),
-      openDocCount        : stats.getOpenDocCount(),
-      submittedOpsCount   : stats.getSubmittedOpCount(req.query.interval),
-      broadcastEventCount : stats.getBroadcastEventCount(req.query.interval)
+    data = stats.pollStats()
     send200 res, JSON.stringify(data)
   else
     client.getSnapshot req.params.name, (error, doc) ->
