@@ -11,31 +11,31 @@ module.exports = {
      * @returns {{
      *      openConnectionCount: number,
      *      openDocCount: number,
-     *      submittedOpsCount: Number,
-     *      broadcastEventCount: Number
+     *      submittedOpsPerSec: Number,
+     *      broadcastEventsPerSec: Number
      * }}
      */
     pollStats : function() {
-        var submittedOpCount = this.getSubmittedOpCount();
-        var broadcastEventCount = this.getBroadcastEventCount();
+        var submittedOpsPerSec = this.flushSubmittedOps();
+        var broadcastEventsPerSec = this.flushBroadcastEvents();
 
         // Get the data per second by figuring out the number of seconds since the last poll
         // and dividing the data by it
         var pollTime = new Date().getTime();
         var secondsSinceLastPoll = (pollTime - lastStatsPoll) / 1000;
         if(secondsSinceLastPoll > 0) {
-            submittedOpCount    = submittedOpCount / secondsSinceLastPoll;
-            broadcastEventCount = broadcastEventCount / secondsSinceLastPoll;
+            submittedOpsPerSec    = submittedOpsPerSec / secondsSinceLastPoll;
+            broadcastEventsPerSec = broadcastEventsPerSec / secondsSinceLastPoll;
         }
 
         // Track this as the last poll time
         lastStatsPoll = pollTime;
 
         return {
-            openConnectionCount : this.getUserAgentCount(),
-            openDocCount        : this.getOpenDocCount(),
-            submittedOpsCount   : submittedOpCount,
-            broadcastEventCount : broadcastEventCount
+            openConnectionCount   : this.getUserAgentCount(),
+            openDocCount          : this.getOpenDocCount(),
+            submittedOpsPerSec    : submittedOpsPerSec,
+            broadcastEventsPerSec : broadcastEventsPerSec
         };
     },
 
@@ -109,7 +109,7 @@ module.exports = {
      *
      * @returns {Number}
      */
-    getSubmittedOpCount : function() {
+    flushSubmittedOps : function() {
         var count = submittedOps.length;
         submittedOps = [];
 
@@ -136,7 +136,7 @@ module.exports = {
      *
      * @returns {Number}
      */
-    getBroadcastEventCount : function() {
+    flushBroadcastEvents : function() {
         var count = broadcastEvents.length;
         broadcastEvents = [];
 
