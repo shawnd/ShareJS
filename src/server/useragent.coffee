@@ -74,6 +74,15 @@ module.exports = (model, options) ->
     getSnapshot: (docName, callback) ->
       @doAuth {docName}, 'get snapshot', callback, ->
         model.getSnapshot docName, callback
+
+    # Return the number of listeners this user agent has (number of docs open)
+    getListenersCount: ->
+      count = 0
+      for listenerKey of @listeners
+        if @listeners.hasOwnProperty(listenerKey)
+          count++
+
+      count
     
     create: (docName, type, meta, callback) ->
       # We don't check that types[type.name] == type. That might be important at some point.

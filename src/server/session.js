@@ -27,6 +27,8 @@ hat = require('hat');
 
 syncQueue = require('./syncqueue');
 
+stats = require('./stats');
+
 AUTH_TIMEOUT = 10000;
 
 // session should implement the following interface:
@@ -191,6 +193,10 @@ exports.handler = function(session, createAgent) {
                 v: opData.v,
                 meta: opData.meta
             };
+
+            // Sending a message to the listener. Lets track it so the status endpoint can report it.
+            stats.addBroadcastEvent();
+
             return send(opMsg);
         };
 
@@ -389,6 +395,9 @@ exports.handler = function(session, createAgent) {
             dupIfSource: query.dupIfSource
         };
 
+        // Submitting an op. Lets track it so the status endpoint can report it.
+        stats.addSubmittedOp();
+
         // If it's a metaOp don't send a response
         return agent.submitOp(query.doc, opData, !(opData.op != null) && (((_ref = opData.meta) != null ? _ref.path : void 0) != null) ? callback : function(error, appliedVersion) {
             var msg;
@@ -458,6 +467,10 @@ exports.handler = function(session, createAgent) {
                     return failAuthentication(error);
                 } else {
                     agent = agent_;
+
+                    // Keep track of this user agent until it disconnects
+                    stats.addUserAgent(agent.sessionId, agent);
+
                     session.send({
                         auth: agent.sessionId
                     });
@@ -484,6 +497,10 @@ exports.handler = function(session, createAgent) {
                 agent.removeListener(docName);
             }
         }
+
+        // User agent no longer connected so stop keeping track of it
+        stats.removeUserAgent(agent.sessionId);
+
         return docState = null;
     });
 };
