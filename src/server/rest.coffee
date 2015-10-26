@@ -4,6 +4,7 @@
 
 http = require 'http'
 url  = require 'url'
+stats = require './stats'
 nameregexes = {}
 
 send403 = (res, message = 'Forbidden\n') ->
@@ -104,22 +105,27 @@ auth = (req, res, createClient, cb) ->
 # GET returns the document snapshot. The version and type are sent as headers.
 # I'm not sure what to do with document metadata - it is inaccessable for now.
 getDocument = (req, res, client) ->
-  client.getSnapshot req.params.name, (error, doc) ->
-    if doc
-      res.setHeader 'X-OT-Type', doc.type.name
-      res.setHeader 'X-OT-Version', doc.v
-      if req.method == "HEAD"
-        send200 res, ""
-      else
-        if typeof doc.snapshot == 'string'
-          send200 res, doc.snapshot
+  # If hitting the /status endpoint, send a JSON of stats back
+  if req.params.name == "status"
+    data = stats.pollStats()
+    send200 res, JSON.stringify(data)
+  else
+    client.getSnapshot req.params.name, (error, doc) ->
+      if doc
+        res.setHeader 'X-OT-Type', doc.type.name
+        res.setHeader 'X-OT-Version', doc.v
+        if req.method == "HEAD"
+          send200 res, ""
         else
-          sendJSON res, doc.snapshot
-    else
-      if req.method == "HEAD"
-        sendError res, error, true
+          if typeof doc.snapshot == 'string'
+            send200 res, doc.snapshot
+          else
+            sendJSON res, doc.snapshot
       else
-        sendError res, error
+        if req.method == "HEAD"
+          sendError res, error, true
+        else
+          sendError res, error
 
 # Put is used to create a document. The contents are a JSON object with {type:TYPENAME, meta:{...}}
 putDocument = (req, res, client) ->
