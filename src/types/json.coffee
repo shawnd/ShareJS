@@ -87,6 +87,9 @@ json.apply = (snapshot, op) ->
         json.checkList elem
 
         elem.splice key, 0, c.li
+
+      # Passing the JSON object in the ld property can cause ShareJS to return 413 errors if you delete too much data.
+      # ShareJS doesn't actually check this property when deleting, so we are choosing to omit it when sending delete operations.
       else if c.ld != undefined
         # List delete
         json.checkList elem
