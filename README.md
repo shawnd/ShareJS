@@ -23,6 +23,13 @@ so we are choosing to omit it when sending delete operations.
 Versions
 ------
 
+1.5.0
+
+    * Added ability to send a shardId in the browserchannel request params so that we can scale out sharejs servers and 
+      shard based upon an ID
+
+-- Dan Wash Apr 22, 2016
+
 1.4.0
 
     * Added status REST endpoint for getting metrics out of sharejs
