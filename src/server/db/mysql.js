@@ -266,12 +266,27 @@ module.exports = MysqlDb = function(options) {
     this.writeOp = function(docName, opData, callback) {
         var sql, values;
         sql = "INSERT INTO " + operations_table + " SET ?";
-        values = {
-            doc: docName,
-            op: JSON.stringify(opData.op),
-            v: opData.v,
-            meta: JSON.stringify(opData.meta)
-        };
+        try {
+            values = {
+                doc: docName,
+                op: JSON.stringify(opData.op),
+                v: opData.v,
+                meta: JSON.stringify(opData.meta)
+            };
+        }
+        catch(exception) {
+            var errorMessage = "Error stringifying ops JSON during ops write for document: " + docName;
+            var errorData = {errorMessage : errorMessage, doc : docName, snapshot : opData.op, meta : opData.meta};
+
+            if(rollbar) {
+                rollbar.handleErrorWithPayloadData(exception, errorData);
+            }
+
+            console.error(errorData);
+
+            return typeof callback === "function" ? callback(errorMessage) : void 0;
+        }
+
         return client.query(sql, values, function(error, result) {
             if (!(error != null)) {
                 return typeof callback === "function" ? callback() : void 0;
