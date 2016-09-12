@@ -31,6 +31,10 @@ module.exports = MysqlDb = function(options) {
         }
     }
 
+    if(options.rollbar) {
+        var rollbar = options.rollbar;
+    }
+
     snapshot_table = options.schema && ("" + options.schema + "." + options.snapshot_table) || options.snapshot_table;
     operations_table = options.schema && ("" + options.schema + "." + options.operations_table) || options.operations_table;
 
@@ -99,14 +103,30 @@ module.exports = MysqlDb = function(options) {
     this.create = function(docName, docData, callback) {
         var sql, values;
         sql = "INSERT INTO " + snapshot_table + " SET ?";
-        values = {
-            doc: docName,
-            v: docData.v,
-            snapshot: JSON.stringify(docData.snapshot),
-            meta: JSON.stringify(docData.meta),
-            type: docData.type,
-            created_at: new Date
-        };
+
+        try {
+            values = {
+                doc: docName,
+                v: docData.v,
+                snapshot: JSON.stringify(docData.snapshot),
+                meta: JSON.stringify(docData.meta),
+                type: docData.type,
+                created_at: new Date
+            };
+        }
+        catch(exception) {
+            var errorMessage = "Error stringifying document JSON during creation for document: " + docName;
+            var errorData = {errorMessage : errorMessage, doc : docName, snapshot : docData.snapshot, meta : docData.meta};
+
+            if(rollbar) {
+                rollbar.handleErrorWithPayloadData(exception, errorData);
+            }
+
+            console.error(errorData);
+
+            return typeof callback === "function" ? callback(errorMessage) : void 0;
+        }
+
         return client.query(sql, values, function(error, result) {
             if (!(error != null)) {
                 return typeof callback === "function" ? callback() : void 0;
@@ -146,12 +166,28 @@ module.exports = MysqlDb = function(options) {
             var data, row;
             if (!(error != null) && result.length > 0) {
                 row = result[0];
-                data = {
-                    v: row.v,
-                    snapshot: JSON.parse(row.snapshot),
-                    meta: JSON.parse(row.meta),
-                    type: row.type
-                };
+
+                try {
+                    data = {
+                        v: row.v,
+                        snapshot: JSON.parse(row.snapshot),
+                        meta: JSON.parse(row.meta),
+                        type: row.type
+                    };
+                }
+                catch(exception) {
+                    var errorMessage = "Error parsing document JSON during fetching of document: " + docName;
+                    var errorData = {errorMessage : errorMessage, doc : docName, snapshot : row.snapshot, meta : row.meta};
+
+                    if(rollbar) {
+                        rollbar.handleErrorWithPayloadData(exception, errorData);
+                    }
+
+                    console.error(errorData);
+
+                    return typeof callback === "function" ? callback(errorMessage) : void 0;
+                }
+
                 return typeof callback === "function" ? callback(null, data) : void 0;
             } else if (!(error != null)) {
                 return typeof callback === "function" ? callback("Document does not exist") : void 0;
@@ -163,11 +199,27 @@ module.exports = MysqlDb = function(options) {
     this.writeSnapshot = function(docName, docData, dbMeta, callback) {
         var sql, values;
         sql = "UPDATE " + snapshot_table + "\nSET ?\nWHERE doc = ?";
-        values = {
-            v: docData.v,
-            snapshot: JSON.stringify(docData.snapshot),
-            meta: JSON.stringify(docData.meta)
-        };
+
+        try {
+            values = {
+                v: docData.v,
+                snapshot: JSON.stringify(docData.snapshot),
+                meta: JSON.stringify(docData.meta)
+            };
+        }
+        catch(exception) {
+            var errorMessage = "Error stringifying document JSON during writing of document: " + docName;
+            var errorData = {errorMessage : errorMessage, doc : docName, snapshot : docData.snapshot, meta : docData.meta};
+
+            if(rollbar) {
+                rollbar.handleErrorWithPayloadData(exception, errorData);
+            }
+
+            console.error(errorData);
+
+            return typeof callback === "function" ? callback(errorMessage) : void 0;
+        }
+
         return client.query(sql, [values, docName], function(error, result) {
             if (!(error != null)) {
                 return typeof callback === "function" ? callback() : void 0;
@@ -184,12 +236,27 @@ module.exports = MysqlDb = function(options) {
         return client.query(sql, values, function(error, result) {
             var data;
             if (!(error != null)) {
-                data = result.map(function(row) {
-                    return {
-                        op: JSON.parse(row.op),
-                        meta: JSON.parse(row.meta)
-                    };
-                });
+                try {
+                    data = result.map(function (row) {
+                        return {
+                            op: JSON.parse(row.op),
+                            meta: JSON.parse(row.meta)
+                        };
+                    });
+                }
+                catch(exception) {
+                    var errorMessage = "Error parsing ops JSON during ops fetch for document: " + docName;
+                    var errorData = {errorMessage : errorMessage, doc : docName, snapshot : row.op, meta : row.meta};
+
+                    if(rollbar) {
+                        rollbar.handleErrorWithPayloadData(exception, errorData);
+                    }
+
+                    console.error(errorData);
+
+                    return typeof callback === "function" ? callback(errorMessage) : void 0;
+                }
+
                 return typeof callback === "function" ? callback(null, data) : void 0;
             } else {
                 return typeof callback === "function" ? callback(error != null ? error.message : void 0) : void 0;

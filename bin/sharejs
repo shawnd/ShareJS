@@ -20,6 +20,17 @@ if(options.postmark && options.postmark.key){
     var postmark = require("postmark")(options.postmark.key);
 }
 
+if(options.rollbar && options.rollbar.key) {
+    var rollbar = require("rollbar");
+    rollbar.init(options.rollbar.key, {
+        environment: options.rollbar.env
+    });
+
+    // Add the rollbar object to the options object so the db can use it
+    // TECH DEBT: If we had updated node, we could emit warnings
+    options.db.rollbar = rollbar;
+}
+
 if(options.pem) {
     server = connect({
          key : fs.readFileSync(options.pem),
