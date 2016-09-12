@@ -16,10 +16,6 @@ var server;
 
 options = require(argv.options);
 
-if(options.postmark && options.postmark.key){
-    var postmark = require("postmark")(options.postmark.key);
-}
-
 if(options.rollbar && options.rollbar.key) {
     var rollbar = require("rollbar");
     rollbar.init(options.rollbar.key, {
@@ -56,14 +52,9 @@ process.title = 'sharejs'
 process.on('uncaughtException', function (err) {
   util.puts('An error has occurred...');
   util.puts('Version ' + sharejs.version + ': ' + err.stack);
-  if(postmark){
-    postmark.send({
-      "From": options.postmark.from_address,
-      "To": options.postmark.to_address,
-      "Subject": options.postmark.subject_prefix + '[sharejs]: Uncaught Exception Event',
-      "TextBody": 'ShareJS ' + sharejs.version + ' has exited after receiving an uncaughtException event.' + err.stack
-    },function(err,res){
-        process.exit(1);
+  if(rollbar){
+    rollbar.handleError(err, function() {
+      process.exit(1);
     });
   }else{
     process.exit(1);

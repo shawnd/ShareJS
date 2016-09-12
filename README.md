@@ -21,7 +21,15 @@ so we are choosing to omit it when sending delete operations.
 [![Build Status](https://secure.travis-ci.org/josephg/ShareJS.png)](http://travis-ci.org/josephg/ShareJS)
 
 Versions
-------
+--------
+
+1.5.0
+
+    * Add Rollbar support. Errors are now sent to Rollbar.
+    * Added try/catches around all JSON parsing and stringifying in mysql operations so they don't kill the server.
+    * Removed Postmark reporting because Rollbar is better.
+
+-- Dan Wash Sept 11, 2016
 
 1.4.0
 

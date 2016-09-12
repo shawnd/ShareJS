@@ -266,6 +266,7 @@ module.exports = MysqlDb = function(options) {
     this.writeOp = function(docName, opData, callback) {
         var sql, values;
         sql = "INSERT INTO " + operations_table + " SET ?";
+
         try {
             values = {
                 doc: docName,
