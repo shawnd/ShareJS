@@ -115,8 +115,25 @@ module.exports = MysqlDb = function(options) {
             };
         }
         catch(exception) {
-            var errorMessage = "Error stringifying document JSON during creation for document: " + docName;
-            var errorData = {errorMessage : errorMessage, doc : docName, snapshot : docData.snapshot, meta : docData.meta};
+            var errorMessage;
+            var errorData;
+
+            if(docData) {
+                errorMessage = "Error stringifying document JSON during creation for document: " + docName;
+                errorData = {
+                    errorMessage: errorMessage,
+                    doc: docName,
+                    snapshot: docData.snapshot,
+                    meta: docData.meta
+                };
+            }
+            else {
+                errorMessage = "Document data empty during creation for document: " + docName;
+                errorData = {
+                    errorMessage: errorMessage,
+                    doc: docName
+                };
+            }
 
             if(rollbar) {
                 rollbar.handleErrorWithPayloadData(exception, errorData);
@@ -208,8 +225,20 @@ module.exports = MysqlDb = function(options) {
             };
         }
         catch(exception) {
-            var errorMessage = "Error stringifying document JSON during writing of document: " + docName;
-            var errorData = {errorMessage : errorMessage, doc : docName, snapshot : docData.snapshot, meta : docData.meta};
+            var errorMessage;
+            var errorData;
+
+            if(docData) {
+                errorMessage = "Error stringifying document JSON during writing of document: " + docName;
+                errorData = {errorMessage : errorMessage, doc : docName, snapshot : docData.snapshot, meta : docData.meta};
+            }
+            else {
+                errorMessage = "Document data empty during writing of document: " + docName;
+                errorData = {
+                    errorMessage: errorMessage,
+                    doc: docName
+                };
+            }
 
             if(rollbar) {
                 rollbar.handleErrorWithPayloadData(exception, errorData);
@@ -246,7 +275,7 @@ module.exports = MysqlDb = function(options) {
                 }
                 catch(exception) {
                     var errorMessage = "Error parsing ops JSON during ops fetch for document: " + docName;
-                    var errorData = {errorMessage : errorMessage, doc : docName, snapshot : row.op, meta : row.meta};
+                    var errorData = {errorMessage : errorMessage, doc : docName, fetchResult : result};
 
                     if(rollbar) {
                         rollbar.handleErrorWithPayloadData(exception, errorData);
@@ -276,8 +305,20 @@ module.exports = MysqlDb = function(options) {
             };
         }
         catch(exception) {
-            var errorMessage = "Error stringifying ops JSON during ops write for document: " + docName;
-            var errorData = {errorMessage : errorMessage, doc : docName, snapshot : opData.op, meta : opData.meta};
+            var errorMessage;
+            var errorData;
+
+            if(opData) {
+                errorMessage = "Error stringifying ops JSON during ops write of ops: " + docName;
+                errorData = {errorMessage : errorMessage, doc : docName, snapshot : opData.op, meta : opData.meta};
+            }
+            else {
+                errorMessage = "Op data empty during writing of ops: " + docName;
+                errorData = {
+                    errorMessage: errorMessage,
+                    doc: docName
+                };
+            }
 
             if(rollbar) {
                 rollbar.handleErrorWithPayloadData(exception, errorData);
