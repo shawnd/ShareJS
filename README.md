@@ -9,6 +9,9 @@ This is a little server (& client library) to allow concurrent editing of any ki
 ShareJS currently supports operational transform on plain-text and arbitrary JSON data.
 
 **Immerse yourself in [API Documentation](https://github.com/josephg/ShareJS/wiki).**
+**NOTE:** The API Documentation states that you must pass the object JSON when performing an `ld` operation. This can cause
+ShareJS to return 413 errors if you delete too much data. ShareJS doesn't actually check this property when deleting,
+so we are choosing to omit it when sending delete operations.
 
 **Visit [Google groups](https://groups.google.com/forum/?fromgroups#!forum/sharejs) for discussions and announcements**
 
@@ -18,7 +21,15 @@ ShareJS currently supports operational transform on plain-text and arbitrary JSO
 [![Build Status](https://secure.travis-ci.org/josephg/ShareJS.png)](http://travis-ci.org/josephg/ShareJS)
 
 Versions
-------
+--------
+
+1.5.0
+
+    * Add Rollbar support. Errors are now sent to Rollbar.
+    * Added try/catches around all JSON parsing and stringifying in mysql operations so they don't kill the server.
+    * Removed Postmark reporting because Rollbar is better.
+
+-- Dan Wash Sept 11, 2016
 
 1.4.0
 
