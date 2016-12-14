@@ -5,6 +5,7 @@
 http = require 'http'
 url  = require 'url'
 stats = require './stats'
+zlib = require('zlib')
 nameregexes = {}
 
 send403 = (res, message = 'Forbidden\n') ->
@@ -48,15 +49,46 @@ sendJSON = (res, obj) ->
   res.end JSON.stringify(obj) + '\n'
 
 # Callback is only called if the object was indeed JSON
+#expectJSONObject = (req, res, callback) ->
+#  pump req, (data) ->
+#    try
+#      obj = JSON.parse data
+#    catch error
+#      send400 res, 'Supplied JSON invalid'
+#      return
+#
+#    callback(obj)
+
+
+gunzipRequestBody = (req, body, callback) ->
+  console.log req.headers
+  if req.headers['content-encoding'] == 'gzip'
+    console.log 'Gunzipping body'
+    console.log body
+    zlib.gunzip body, (error, uncompressedBody) ->
+      console.log error
+      console.log uncompressedBody
+      callback error, uncompressedBody
+      return
+  else
+    console.log 'GZIP Header was not found'
+    console.log body
+    callback null, body
+  return
+
 expectJSONObject = (req, res, callback) ->
   pump req, (data) ->
-    try
-      obj = JSON.parse data
-    catch error
-      send400 res, 'Supplied JSON invalid'
+    gunzipRequestBody req, data, (err, requestBody) ->
+      if err
+        send400 res, 'Could not gunzip request body'
+      else
+        try
+          return callback(JSON.parse(requestBody))
+        catch _error
+          send400 res, 'Could not parse request body'
+          return
       return
-
-    callback(obj)
+    return
 
 pump = (req, callback) ->
   data = ''
