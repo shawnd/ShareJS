@@ -4,6 +4,7 @@ lib/*
 test/*.js
 test/**/*.js
 .idea/*
+bin/options.js
 node_modules/ws/build/
 node_modules/ws/builderror.log
 node_modules/.bin/express
