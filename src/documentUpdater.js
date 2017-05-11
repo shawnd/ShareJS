@@ -1,12 +1,12 @@
+#!/usr/bin/env node
 /**
  * Entry point to commit any uncommitted ops to all snaphots
  *
- *   local dev env usage: node documentUpdater.js -f /home/vagrant/ceros/build/localenv/sharejs/options.js
+ *   local dev env usage: ./src/documentUpdater.js -f /home/vagrant/ceros/build/localenv/sharejs/options.js
  */
 'use strict';
 
 require('coffee-script');
-
 var Model = require('./server/model');
 var createDb = require('./server/db');
 
