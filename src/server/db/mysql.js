@@ -337,6 +337,23 @@ module.exports = MysqlDb = function(options) {
             }
         });
     };
+    this.getDocumentNamesWithUncommittedOps = function (callback) {
+        var sql, values;
+        sql = "SELECT doc\nFROM " + snapshot_table + " snap\nWHERE snap.v < (select max(v) from " + operations_table + " op where op.doc=snap.doc)";
+        return client.query(sql, function (error, result) {
+            if (typeof callback === "function") {
+                if (error) {
+                    return callback(error.message);
+                } else {
+                    var docNames = result.map(function (row) {
+                        return row.doc
+                    });
+
+                    return callback(null, docNames);
+                }
+            }
+        });
+    };
     if (options.create_tables_automatically) {
         client.query("SELECT * from " + snapshot_table + " LIMIT 0", function(error, result) {
             if (error != null ? error.message.match("(does not exist|ER_NO_SUCH_TABLE)") : void 0) {

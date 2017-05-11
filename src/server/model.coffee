@@ -607,8 +607,49 @@ module.exports = Model = (db, options) ->
     db?.close?()
     db = null
 
-  return
+  flushDocument = (docName, callback) ->
+    model.getSnapshot docName, (error) ->
+      if error
+        callback error
+      else
+        tryWriteSnapshot docName, (error) ->
+          if error
+            callback error
+          else
+            callback()
+          return
+      return
+    return
 
+  flushDocuments = (docNames, callback) ->
+    flushDocument docNames.pop(), (error) ->
+      if error
+        callback error
+      else
+        if docNames.length > 0
+          flushDocuments docNames, callback
+        else
+          callback()
+      return
+    return
+
+  @flushDocumentsWithUncommittedOps = (callback) ->
+    db.getDocumentNamesWithUncommittedOps (error, docNames) ->
+      if error
+        callback error
+      else if docNames.length == 0
+        callback()
+      else
+        flushDocuments docNames, (error) ->
+          if error
+            callback error
+          else
+            callback()
+          return
+      return
+    return
+
+  return
 # Model inherits from EventEmitter.
 Model:: = new EventEmitter
 
