@@ -2,7 +2,7 @@
 /**
  * Entry point to commit any uncommitted ops to all snaphots
  *
- *   local dev env usage: ./src/documentUpdater.js -f /home/vagrant/ceros/build/localenv/sharejs/options.js
+ *    local dev env usage: ./src/documentUpdater.js -f /home/vagrant/ceros/build/localenv/sharejs/options.js
  */
 'use strict';
 
