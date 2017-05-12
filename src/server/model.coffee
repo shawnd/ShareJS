@@ -607,6 +607,7 @@ module.exports = Model = (db, options) ->
     db?.close?()
     db = null
 
+  # Load the doc (which applies uncommitted ops) and write the doc back to the database
   flushDocument = (docName, callback) ->
     model.getSnapshot docName, (error) ->
       if error
@@ -621,6 +622,7 @@ module.exports = Model = (db, options) ->
       return
     return
 
+  # Load the docs (which applies uncommitted ops) and write the docs back to the database
   flushDocuments = (docNames, callback) ->
     flushDocument docNames.pop(), (error) ->
       if error
@@ -633,6 +635,7 @@ module.exports = Model = (db, options) ->
       return
     return
 
+  # Update any docs in the database that have uncommitted ops
   @flushDocumentsWithUncommittedOps = (callback) ->
     db.getDocumentNamesWithUncommittedOps (error, docNames) ->
       if error
