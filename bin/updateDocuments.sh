@@ -1,0 +1,1 @@
+../src/documentUpdater.js -f ~/ceros/build/localenv/sharejs/options.js
